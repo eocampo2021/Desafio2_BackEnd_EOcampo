@@ -1,27 +1,27 @@
-const fs = require ('fs')
+const fs = require('fs');
 
 
 class ProductManager {
   constructor(path){
     this.path = path;
-    this.path = this.readData();
+    this.products = this.readData();
   }
 
   readData(){
-    const data = JSON.parse(fs.readFileSync(`./${this.path}`, `utf-8)`));
+    const data = JSON.parse(fs.readFileSync(`./${this.path}`, 'utf-8'));
     return data;
   }
   writeData(data){
-    let writeData = JSON.stringify(data);
-    fs.writeFileSync(`./${this.path}`, writeData);
-    return writeData;
+    let writeFile = JSON.stringify(data);
+    fs.writeFileSync(`./${this.path}`, writeFile);
+    return writeFile;
   }
 
   
   idGenerator(){
-    if(this.products.lenght > 0){
-        let id = this.products.map(product => product.id);
-        return Math.max(...id) + 1;
+    if(this.products.length > 0){
+        let productsID = this.products.map(product => product.id);
+        return Math.max(...productsID) + 1;
     }else{
       let id = 1;
       return id;
@@ -34,24 +34,25 @@ class ProductManager {
  }
 
  addProduct(product){
-  if(this.products.find (item => item.code === product.code)){
+   //console.log(product);
+  if (this.products.find((item) => item.code === product.code)){
       return console.log("El codigo del producto ya existe");
   }
-  else if(!!!item.title || !!!item.description || !!!item.price || !!!item.thumbnail|| !!!item.code || !!!item.stock)
-      return console.group("Hay datos Null")
-
-  else{
+   else if(!!!product.title || !!!product.description || !!!product.price || !!!product.code || !!!product.thumbnail || !!!product.stock){
+      return console.log("Hay datos Null");
+    }else{
       let data = this.readData();
       product.id = this.idGenerator();
       data.push(product);
       this.writeData(data);
   }
- }
+}
+ 
 
  getProductById(id){
   let data = this.readData();
-  if(data.find(product => product.id ===id)){
-    let getProduct = data.find(product => product.id ===id)
+  if(data.find(product => product.id === id)){
+    let getProduct = data.find(product => product.id === id)
     console.log (getProduct);
     return getProduct;
   }else{ // sacar este else
@@ -85,15 +86,32 @@ updateProduct(id, product){
  }
 }
 
-const productManager = new ProductManager(`db.json`);
+const productManager = new ProductManager("db.json");
 
-let p1 = {
+let product3 = {
     title: "Auto", 
-    description: "Ford", 
-    price: 2100000,
-    code: "ford1234",
-    thumbnail: "http://stockimg/net/1234.png"
-    stock: 50,
+    description: "Fiat", 
+    price: 1190000,
+    code: "FIAT1244",
+    thumbnail: "url://stockimg/net/f1234.png",
+    stock: 15,
 };
 
-productManager.addProduct(p1);
+
+
+//productManager.addProduct(product3);
+
+productManager.updateProduct(3, {
+  title: "Auto", 
+  description: "Fiat", 
+  price: 1199999,
+  code: "FIAT9999",
+  thumbnail: "url://stockimg/net/f1234.png",
+  stock: 20,
+});
+
+
+//productManager.getProductById(3);
+
+//productManager.deleteProduct(2);
+
